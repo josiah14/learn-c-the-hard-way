@@ -2,10 +2,6 @@ CFLAGS=-Wall -g
 
 all: ex3
 
-# the above is the same as the below, interestingly
-# build:
-# 	cc $(CFLAGS) ex1.c -o ex1
-
 clean:
 	rm -f ex3
 	rm -f ex3.o
