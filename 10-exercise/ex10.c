@@ -10,40 +10,39 @@ int main(int argc, char *argv[]) {
 
   for (int i = 0; argv[1][i] != '\0'; i++) {
     char letter = argv[1][i];
+    // to uppercase
+    if (letter > 90) {
+      letter = letter - 32;
+    }
 
     switch (letter) {
     case 'a': // fall through
     case 'A':
-      printf("%d: 'A'\n", i);
+      printf("%d: %d: 'A'\n", i, letter);
       break;
-    case 'e': // fall through
     case 'E':
-      printf("%d: 'E'\n", i);
+      printf("%d: %d: 'E'\n", i, letter);
       break;
-    case 'i': // fall through
     case 'I':
-      printf("%d: 'I'\n", i);
+      printf("%d: %d: 'I'\n", i, letter);
       break;
-    case 'o': // fall through
     case 'O':
-      printf("%d: 'O'\n", i);
+      printf("%d: %d: 'O'\n", i, letter);
       break;
-    case 'u': // fall through
     case 'U':
-      printf("%d: 'U'\n", i);
+      printf("%d: %d: 'U'\n", i, letter);
       break;
-    case 'y': // fall through
     case 'Y':
       // Y is only a vowel sometimes
       if (i > 2) {
-        printf("%d: 'Y'\n", i);
+        printf("%d: %d: 'Y'\n", i, letter);
       } else {
-        printf("%d: %c is not a vowel in this case\n", i, letter);
+        printf("%d: %d: %c is not a vowel in this case\n", i, letter, letter);
       }
       break;
 
     default:
-      printf("%d: %c is never a vowel\n", i, letter);
+      printf("%d: %d: %c is never a vowel\n", i, letter, letter);
     }
   }
 
