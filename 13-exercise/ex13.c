@@ -6,13 +6,6 @@ int main(int argc, char* argv[]) {
   // if possible, so I take that approach here, instead, rather than what's in the
   // original text.
 
-  // go through ecah string in argv
-  // Skip argv[0] because it's just the name of the executable
-  for (int i = 1; i < argc; i++) {
-    // print each string with it's location in the argument list
-    printf("arg %d: %s\n", i, argv[i]);
-  }
-
   // let's make our own array of strings
   char* states[] = {
     "California",
@@ -21,6 +14,14 @@ int main(int argc, char* argv[]) {
     "Texas"
   };
   int num_states = 4;
+
+  states[0] = argv[1];
+  // go through ecah string in argv
+  // Skip argv[0] because it's just the name of the executable
+  for (int i = 1; i < argc; i++) {
+    // print each string with it's location in the argument list
+    printf("arg %d: %s\n", i, argv[i]);
+  }
 
   for (int i = 0; i < num_states; i++) {
     // also altered - it's unnatural to count from 0.  User-friendliness dictates
