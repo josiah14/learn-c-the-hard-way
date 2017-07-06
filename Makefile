@@ -9,6 +9,7 @@ all:
 	$(MAKE) -C 12-exercise
 	$(MAKE) -C 13-exercise
 	$(MAKE) -C 14-exercise
+	$(MAKE) -C 15-exercise
 
 clean:
 	$(MAKE) clean -C 1-exercise
@@ -21,3 +22,4 @@ clean:
 	$(MAKE) clean -C 12-exercise
 	$(MAKE) clean -C 13-exercise
 	$(MAKE) clean -C 14-exercise
+	$(MAKE) clean -C 15-exercise
