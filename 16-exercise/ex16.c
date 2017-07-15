@@ -39,7 +39,7 @@ void Person_print(struct Person* who) {
 int main(int argc, char* argv[]) {
   // make two people structures
   struct Person* josiah = Person_create("Josiah Berkebile", 32, 74, 170);
-  struct Person* joanna = Person_create("Joanna Carey Berkeblie", 28, 69, 145);
+  struct Person* joanna = Person_create("Joanna Carey Berkebile", 28, 69, 145);
 
   // print them and their memory locations out
   printf("Josiah is at memory location %p:\n", josiah);
@@ -47,6 +47,14 @@ int main(int argc, char* argv[]) {
 
   printf("Joanna is at memory location %p:\n", joanna);
   Person_print(joanna);
+
+  // this is how you would append to a string in a struct
+  char* name = malloc(strlen(josiah->name) + strlen(": This was appended.") + 1);
+  strcpy(name, josiah->name);
+  strcat(name, ": This was appended.");
+  josiah->name = realloc(josiah->name, strlen(name) + 1);
+  strcpy(josiah->name, name);
+  free(name);
 
   // make everyone age 2 years older and print them, again
   josiah->age += 2;
