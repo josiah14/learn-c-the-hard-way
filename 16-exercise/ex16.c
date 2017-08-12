@@ -58,7 +58,7 @@ int main(int argc, char* argv[]) {
   strcpy(josiah->name, name);
   free(name);
 
-  // make everyone age 2 years older and print them, again
+  // make everyone's age 2 years older and print them, again
   josiah->age += 2;
   joanna->age += 2;
   // actually, let's just alter a lot of things and see how things turn out.
