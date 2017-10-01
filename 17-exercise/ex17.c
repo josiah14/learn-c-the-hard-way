@@ -5,7 +5,7 @@
 #include <string.h>
 
 #define MAX_DATA 612
-#define MAX_ROWS 100
+#define MAX_ROWS 700
 
 struct Address {
   int id;
@@ -119,6 +119,7 @@ void Database_set(struct Connection* conn,
                   const char *name,
                   const char *email) {
   struct Address* addr = &conn->db->rows[id];
+  printf("%d", addr->id);
   if (addr->set) {
     die("Database address already set.  You must delete it before you can set it, again.", conn);
   }
@@ -194,7 +195,7 @@ int main(int argc, char* argv[]) {
     break;
   case 's':
     if (argc != 6) {
-    die("Need id, name, and email to set", conn);
+      die("Need id, name, and email to set", conn);
     }
 
     Database_set(conn, id, argv[4], argv[5]);
