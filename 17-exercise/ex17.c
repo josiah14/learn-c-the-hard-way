@@ -52,8 +52,6 @@ void Address_print(struct Address* addr) {
 
 void Database_load(struct Connection* conn) {
   int rc = fread(conn->db, sizeof(struct Database), 1, conn->file);
-  printf("dbload - max_rows: %d\n", conn->db->max_rows);
-  printf("dbload - max_data: %d\n", conn->db->max_data);
   if (rc != 1) {
     die("Failed to load the database.", conn);
   }
@@ -66,34 +64,24 @@ struct Connection* Database_open(const char* filename, char mode, long max_rows,
   conn->db = malloc(sizeof(struct Database));
   if (!conn->db) die("Memory error", conn);
 
+  conn->db->max_rows = max_rows;
+  conn->db->max_data = max_data;
+  // TODO: Dude, set the number of rows before this, bro!
   conn->db->rows = malloc(sizeof(struct Address) * conn->db->max_rows);
   if (!conn->db->rows) die("Memory error", conn);
 
-  printf("deciding mode\n");
   if (mode == 'c') {
     // open the file for writing only
     // Since we aren't checking to see if the file exists, we must be creating
     // it, here.  Otherwise, we would need to load it, as below
-    printf("setting data and rows maxes\n");
-    conn->db->max_rows = max_rows;
-    printf("done setting rows max\n");
-    conn->db->max_data = max_data;
-    printf("done setting all maxes\n");
-    conn->file = fopen(filename, "w");
-    printf("opened file\n");
+    conn->file = fopen(filename, "r+");
   } else {
     // open the file for both reading and writing
     conn->file = fopen(filename, "r+");
     if (conn->file) {
-      printf("reading db\n");
       Database_load(conn);
     }
   }
-
-  /* for (int i = 0; i < conn->db->max_rows; i++) { */
-  /*   conn->db->rows[i] = &malloc(sizeof(struct Address)); */
-  /* } */
-
 
   if (!conn->file) {
     die("Failed to open the file.", conn);
@@ -104,7 +92,13 @@ struct Connection* Database_open(const char* filename, char mode, long max_rows,
 
 void Database_write(struct Connection* conn) {
   // make sure we are at the beginning of the file, first
+  if (conn->file == NULL) {
+    printf("file pointer is null\n");
+  } else {
+    printf("file pointer is NOT null\n");
+  }
   rewind(conn->file);
+  /* rewind(conn->file); // TODO: This breaks... */
   int rc = fwrite(conn->db, sizeof(struct Database), 1, conn->file);
   if (rc != 1) {
     die("Failed to write to database.", conn);
@@ -119,17 +113,12 @@ void Database_write(struct Connection* conn) {
 void Database_create(struct Connection *conn) {
   int i = 0;
 
-  printf("rows to assign: %d", conn->db->max_rows);
   for (i = 0; i < conn->db->max_rows; i++) {
     // make a prototype to initialize it
-    printf("writing row %d\n", i);
-    struct Address addr = {.id = i, .set = 0 };
-    printf("initialized row %d\n", i);
+    struct Address addr = { .id = i, .set = 0 };
     // then, just assign it
     // TODO this assignment below breaks.
-    printf("id: %d\n", addr.id);
-    printf("set: %d\n", addr.set);
-    printf("assigned row %d\n", i);
+    conn->db->rows[i] = addr;
   }
 }
 
@@ -137,17 +126,10 @@ void Database_set(struct Connection* conn,
                   int id,
                   const char *name,
                   const char *email) {
-  printf("%s\n", name);
-  printf("%s\n", email);
-  printf("%d\n", id);
   /* struct Address* addr = &conn->db->rows[id]; */
   struct Address* addr = malloc(sizeof(struct Address));
-  printf("addr allocated\n");
   // TODO fix the bug in the line below - causes a segmentation fault
-  printf("location: %p", &conn->db->rows[id]);
   conn->db->rows[id] = *addr;
-  printf("addr assigned to rows array\n");
-  printf("%d", addr->id);
   if (addr->set) {
     die("Database address already set.  You must delete it before you can set it, again.", conn);
   }
@@ -205,8 +187,8 @@ int main(int argc, char* argv[]) {
   char action = argv[4][0];
   int max_rows = atoi(argv[2]);
   int max_data = atoi(argv[3]);
+  printf("world!\n");
   struct Connection* conn = Database_open(filename, action, max_rows, max_data);
-  printf("database opened\n");
   int id = 0;
 
   if (argc > 5) id = atoi(argv[5]);
@@ -214,7 +196,7 @@ int main(int argc, char* argv[]) {
 
   switch (action) {
   case 'c':
-    Database_create(conn);
+    /* Database_create(conn); */
     Database_write(conn);
     break;
   case 'g':
